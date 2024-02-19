@@ -91,6 +91,12 @@ void OutputModule::processStop()
 
 void OutputModule::processReset()
 {
+    if(isOnMainTimer && !mainTimer->timerRunning() && mainTimer->isAtStart())
+    {
+        mainTimer->setRunning(true);
+        return;
+    }
+
     bool currentlyOnSecondaryTimer = !isOnMainTimer;
     switchToMainTimer(true);
     if (currentlyOnSecondaryTimer)

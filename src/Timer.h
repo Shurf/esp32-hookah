@@ -10,6 +10,8 @@ public:
     Timer(int minutes = DEFAULT_MINUTES, int seconds = DEFAULT_SECONDS, char direction = DOWN);
     void updateTimer();
     void setRunning(bool value);
+    bool timerRunning(){return isRunning;}
+    bool isAtStart(){return currentMinutes == initialMinutes && currentSeconds == initialSeconds;}
 
     void clearTimeChanged();
     bool isTimeChanged();

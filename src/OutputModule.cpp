@@ -5,6 +5,7 @@ OutputModule::OutputModule(LCD *lcdScreen)
     lcd = lcdScreen;
     mainTimer = new Timer();
     secondaryTimer = new Timer(0, 0, UP);
+    httpControl = new HttpControl();
 
     switchToMainTimer();
 
@@ -22,14 +23,26 @@ void OutputModule::enableLed()
     analogWrite(LED_RED_PIN, 255);
 }
 
+void OutputModule::setPrimaryIndication()
+{
+    httpControl->setPrimary();
+    enableLed();
+}
+
 void OutputModule::disableLed()
 {
     analogWrite(LED_RED_PIN, 0);
 }
 
+void OutputModule::setSecondaryIndication()
+{
+    httpControl->setSecondary();
+    disableLed();
+}
+
 void OutputModule::switchToMainTimer(bool reset)
 {
-    disableLed();
+    setSecondaryIndication();
     isOnMainTimer = true;
     if (reset)
         mainTimer->reset();
@@ -61,12 +74,12 @@ void OutputModule::processElapsed()
     if (isOnMainTimer)
     {
         lcd->setRedTimeColor();
-        enableLed();
+        setPrimaryIndication();
     }
     else
     {
         lcd->setWhiteTimeColor();
-        disableLed();
+        setSecondaryIndication();
     }
     lcd->setNewTime(newTimer->getCurrentMinutes(), newTimer->getCurrentSeconds());
 
@@ -93,7 +106,7 @@ void OutputModule::processReset()
 {
     if(isOnMainTimer && !mainTimer->timerRunning() && mainTimer->isAtStart())
     {
-        mainTimer->setRunning(true);
+        lcd->processStartRequest();
         return;
     }
 

@@ -3,6 +3,7 @@
 #include <Arduino.h>
 #include "LCD.h"
 #include "Timer.h"
+#include "HttpControl.h"
 
 class OutputModule
 {
@@ -16,6 +17,8 @@ public:
     void processTick();
 private:
 
+    void setPrimaryIndication();
+    void setSecondaryIndication();
     void enableLed();
     void disableLed();
     void switchToMainTimer(bool reset = true);
@@ -26,4 +29,5 @@ private:
     Timer *mainTimer;
     Timer *secondaryTimer;
     LCD* lcd;
+    HttpControl* httpControl;
 };

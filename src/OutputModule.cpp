@@ -25,8 +25,9 @@ void OutputModule::enableLed()
 
 void OutputModule::setPrimaryIndication()
 {
+    lcd->setWhiteTimeColor();
     httpControl->setPrimary();
-    enableLed();
+    disableLed();
 }
 
 void OutputModule::disableLed()
@@ -36,13 +37,14 @@ void OutputModule::disableLed()
 
 void OutputModule::setSecondaryIndication()
 {
+    lcd->setRedTimeColor();
     httpControl->setSecondary();
-    disableLed();
+    enableLed();
 }
 
 void OutputModule::switchToMainTimer(bool reset)
 {
-    setSecondaryIndication();
+    setPrimaryIndication();
     isOnMainTimer = true;
     if (reset)
         mainTimer->reset();
@@ -72,14 +74,12 @@ void OutputModule::processElapsed()
     newTimer->setRunning(true);
     oldTimer->setRunning(false);
     if (isOnMainTimer)
-    {
-        lcd->setRedTimeColor();
-        setPrimaryIndication();
+    {        
+        setSecondaryIndication();
     }
     else
-    {
-        lcd->setWhiteTimeColor();
-        setSecondaryIndication();
+    {        
+        setPrimaryIndication();
     }
     lcd->setNewTime(newTimer->getCurrentMinutes(), newTimer->getCurrentSeconds());
 
@@ -106,7 +106,7 @@ void OutputModule::processReset()
 {
     if(isOnMainTimer && !mainTimer->timerRunning() && mainTimer->isAtStart())
     {
-        lcd->processStartRequest();
+        processStart();
         return;
     }
 

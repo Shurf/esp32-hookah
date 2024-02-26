@@ -5,11 +5,13 @@ OutputModule::OutputModule(LCD *lcdScreen)
     lcd = lcdScreen;
     mainTimer = new Timer();
     secondaryTimer = new Timer(0, 0, UP);
+    powerSavingTimer = new Timer(POWERSAVING_TIMEOUT_MINUTES, POWERSAVING_TIMEOUT_SECONDS);
     httpControl = new HttpControl();
 
     switchToMainTimer();
 
     lcd->update(true);
+    lcd->dimScreen();
 
     pinMode(LED_RED_PIN, OUTPUT);
     pinMode(LED_GREEN_PIN, OUTPUT);
@@ -89,6 +91,7 @@ void OutputModule::processElapsed()
 
 void OutputModule::processStart()
 {
+    lcd->brightenScreen();
     mainTimer->setRunning(true);
     lcd->processStartRequest();
 }
@@ -100,6 +103,8 @@ void OutputModule::processStop()
 
     switchToMainTimer(false);
     lcd->processStopRequest();
+    powerSavingTimer->reset();
+    powerSavingTimer->setRunning(true);
 }
 
 void OutputModule::processReset()
@@ -125,6 +130,15 @@ void OutputModule::processSetTime(int minutes, int seconds)
 
 void OutputModule::processTick()
 {
+    powerSavingTimer->updateTimer();
+    if(powerSavingTimer->isElapsed())
+    {
+        powerSavingTimer->setRunning(false);
+        powerSavingTimer->reset();
+        powerSavingTimer->clearElapsed();
+        lcd->dimScreen();
+        return;
+    }
     if (isOnMainTimer)
     {
         updateLcdTime(mainTimer);

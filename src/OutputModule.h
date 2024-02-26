@@ -28,6 +28,7 @@ private:
     bool isOnMainTimer;
     Timer *mainTimer;
     Timer *secondaryTimer;
+    Timer *powerSavingTimer;
     LCD* lcd;
     HttpControl* httpControl;
 };

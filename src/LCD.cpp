@@ -2,6 +2,9 @@
 
 LCD::LCD()
 {
+    pinMode(LCD_LED, OUTPUT);
+    brightenScreen();
+
     lcd = new Adafruit_ILI9341(LCD_CS, LCD_DC, LCD_RST);
     lcd->begin();
     lcd->fillScreen(ILI9341_BLACK);
@@ -48,6 +51,16 @@ LCD::LCD()
     resetWasTouched = false;
 
     timeColor = ILI9341_WHITE;
+}
+
+void LCD::brightenScreen()
+{
+    analogWrite(LCD_LED, LCD_ACTIVE_VOLTAGE);
+}
+
+void LCD::dimScreen()
+{
+    analogWrite(LCD_LED, LCD_POWERSAVING_VOLTAGE);
 }
 
 void LCD::drawHookah()

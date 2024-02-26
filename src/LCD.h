@@ -9,6 +9,11 @@
 #define LCD_DC 26
 #define LCD_RST 27
 
+#define LCD_LED 21
+
+#define LCD_ACTIVE_VOLTAGE 255
+#define LCD_POWERSAVING_VOLTAGE 16
+
 #define NOTHING_REQUESTED 0
 #define START_REQUESTED 1
 #define STOP_REQUESTED 2
@@ -36,6 +41,9 @@ public:
 
     void processStartRequest();
     void processStopRequest();
+
+    void brightenScreen();
+    void dimScreen();
 
 private:
     

@@ -31,4 +31,5 @@ private:
     Timer *powerSavingTimer;
     LCD* lcd;
     HttpControl* httpControl;
+    int percentage;
 };

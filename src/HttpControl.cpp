@@ -1,15 +1,14 @@
 #include "HttpControl.h"
 
-void HttpControl::sendRequest(bool primary)
+void HttpControl::sendRequest(JsonDocument& doc)
 {
-    JsonDocument doc;
     String requestBody;
     HTTPClient http;
 
     Serial.println("sending");
     
     doc["led_profile_name"] = PROFILE_NAME;
-    doc["primary"] = primary;
+    
 
     serializeJson(doc, requestBody);
 
@@ -18,12 +17,26 @@ void HttpControl::sendRequest(bool primary)
     http.POST(requestBody);
 }
 
+void HttpControl::setPrimarySecondary(bool primary)
+{
+    JsonDocument doc;
+    doc["primary"] = primary;
+    sendRequest(doc);
+}
+
+void HttpControl::setPercentage(int percentage)
+{
+    JsonDocument doc;
+    doc["percentage"] = percentage;
+    sendRequest(doc);
+}
+
 void HttpControl::setPrimary()
 {
-    sendRequest(true);
+    setPrimarySecondary(true);
 }
 
 void HttpControl::setSecondary()
 {
-    sendRequest(false);
+    setPrimarySecondary(false);
 }

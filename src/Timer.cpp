@@ -111,6 +111,16 @@ int Timer::getCurrentSeconds()
     return currentSeconds;
 }
 
+int Timer::getInitialMinutes()
+{
+    return initialMinutes;
+}
+
+int Timer::getInitialSeconds()
+{
+    return initialSeconds;
+}
+
 void Timer::setTime(int minutes, int seconds)
 {
     initialMinutes = minutes;

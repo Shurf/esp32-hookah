@@ -5,6 +5,7 @@ Bot::Bot(WiFiClientSecure &client)
 
     client.setCACert(TELEGRAM_CERTIFICATE_ROOT); // Add root certificate for api.telegram.org
     bot = new UniversalTelegramBot(BOTtoken, client);
+    bot->longPoll = 60;
     lastTimeBotRan = millis();
     clearRequests();
 }

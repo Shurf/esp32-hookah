@@ -23,6 +23,9 @@ public:
     int getCurrentMinutes();
     int getCurrentSeconds();
 
+    int getInitialMinutes();
+    int getInitialSeconds();
+
     void setTime(int minutes, int seconds);
 
 private:

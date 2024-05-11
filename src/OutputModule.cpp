@@ -8,6 +8,8 @@ OutputModule::OutputModule(LCD *lcdScreen)
     powerSavingTimer = new Timer(POWERSAVING_TIMEOUT_MINUTES, POWERSAVING_TIMEOUT_SECONDS);
     httpControl = new HttpControl();
 
+    percentage = 100;
+
     switchToMainTimer();
 
     lcd->update(true);
@@ -61,6 +63,9 @@ void OutputModule::updateLcdTime(Timer *timer)
     timer->updateTimer();
     if (timer->isTimeChanged())
     {
+        auto current_seconds = timer->getCurrentMinutes()*SECONDS_IN_MINUTE + timer->getCurrentSeconds();
+        auto max_seconds = timer->getInitialMinutes()*SECONDS_IN_MINUTE + timer->getInitialSeconds();
+        httpControl->setPercentage(100*current_seconds / max_seconds);
         lcd->setNewTime(timer->getCurrentMinutes(), timer->getCurrentSeconds());
         timer->clearTimeChanged();
     }

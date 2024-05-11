@@ -63,9 +63,13 @@ void OutputModule::updateLcdTime(Timer *timer)
     timer->updateTimer();
     if (timer->isTimeChanged())
     {
-        auto current_seconds = timer->getCurrentMinutes()*SECONDS_IN_MINUTE + timer->getCurrentSeconds();
-        auto max_seconds = timer->getInitialMinutes()*SECONDS_IN_MINUTE + timer->getInitialSeconds();
-        httpControl->setPercentage(100*current_seconds / max_seconds);
+        if(isOnMainTimer)
+        {
+            auto current_seconds = timer->getCurrentMinutes()*SECONDS_IN_MINUTE + timer->getCurrentSeconds();
+            auto max_seconds = timer->getInitialMinutes()*SECONDS_IN_MINUTE + timer->getInitialSeconds();
+            httpControl->setPercentage(100*current_seconds / max_seconds);
+        }
+        
         lcd->setNewTime(timer->getCurrentMinutes(), timer->getCurrentSeconds());
         timer->clearTimeChanged();
     }

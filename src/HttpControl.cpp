@@ -4,8 +4,6 @@ void HttpControl::sendRequest(JsonDocument& doc)
 {
     String requestBody;
     HTTPClient http;
-
-    Serial.println("sending");
     
     doc["led_profile_name"] = PROFILE_NAME;
     

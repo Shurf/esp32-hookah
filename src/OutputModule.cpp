@@ -51,7 +51,10 @@ void OutputModule::switchToMainTimer(bool reset)
     setPrimaryIndication();
     isOnMainTimer = true;
     if (reset)
+    {
         mainTimer->reset();
+        httpControl->setPercentage(100);
+    }
     secondaryTimer->reset();
     secondaryTimer->setRunning(false);
     lcd->setWhiteTimeColor();
@@ -81,6 +84,7 @@ void OutputModule::processElapsed()
     Timer *oldTimer = isOnMainTimer ? mainTimer : secondaryTimer;
 
     mainTimer->reset();
+    httpControl->setPercentage(100);
     secondaryTimer->reset();
     newTimer->setRunning(true);
     oldTimer->setRunning(false);
@@ -114,6 +118,7 @@ void OutputModule::processStop()
     lcd->processStopRequest();
     powerSavingTimer->reset();
     powerSavingTimer->setRunning(true);
+    
 }
 
 void OutputModule::processReset()
